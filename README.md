@@ -146,5 +146,4 @@ src/
 4. Submit a pull request
 
 ## License
-Copyright (c) 2025 Varun Jha
-MIT License - feel free to use this project for learning and development!
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
