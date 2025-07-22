@@ -3,7 +3,8 @@
      const loadQueryLimit = async () => {
        if (currentUser) {
 -        const { canQuery: canQueryValue, remainingQueries: remaining } = await checkQueryLimit(currentUser.uid);
--        setCanQuery(canQueryValue);
+          const result = await checkQueryLimit(currentUser.uid);
+          const { canQuery: canQueryValue, remainingQueries: remaining } = result;
 -        setRemainingQueries(remaining);
 +        try {
 +          const { canQuery: canQueryValue, remainingQueries: remaining } = await checkQueryLimit(currentUser.uid);
