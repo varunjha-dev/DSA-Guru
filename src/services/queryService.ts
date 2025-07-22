@@ -15,7 +15,7 @@
      const userDoc = await getDoc(userDocRef);
      
      if (!userDoc.exists()) {
-       // First time user - create document with 0 count
+      // First time user - create document
        await setDoc(userDocRef, {
          dailyCount: 0,
          lastQueryDate: today
@@ -24,6 +24,15 @@
      }
      
      const data = userDoc.data() as UserQueryData;
+    
+    // Ensure data has required fields
+    if (!data.hasOwnProperty('dailyCount') || !data.hasOwnProperty('lastQueryDate')) {
+      await setDoc(userDocRef, {
+        dailyCount: 0,
+        lastQueryDate: today
+      });
+      return { canQuery: true, remainingQueries: 5 };
+    }
      
      // Reset count if it's a new day
      if (data.lastQueryDate !== today) {
@@ -41,7 +50,7 @@
      return { canQuery, remainingQueries };
    } catch (error) {
      console.error('Error checking query limit:', error);
--    return { canQuery: false, remainingQueries: 0 };
+    // Fail-safe: allow queries if there's an error
 +    // If there's an error, allow the user to query (fail-safe approach)
 +    return { canQuery: true, remainingQueries: 5 };
    }
